@@ -99,8 +99,8 @@ Detect static obstacles in vehicle path and provide obstacle information to the 
   </tr>
 </table> 
 
-### Technical Safety Concept
-## Architecture
+## Technical Safety Concept
+### Architecture
  ```mermaid
    graph LR
     %% Style for topics (rounded rectangles with colored fill and border)
@@ -127,10 +127,10 @@ Detect static obstacles in vehicle path and provide obstacle information to the 
     ObstacleDetection -- "STD_MSGS/MSG/BOOL" --> DecisionCore
    
 ```
-
+### Technical Safety Requirement
 <table>
   <tr>
-    <th>Technical safety requirement ID</th>
+    <th>TSR ID</th>
     <th>Description</th>
     <th>TSR link</th>
   </tr>
@@ -160,6 +160,100 @@ Detect static obstacles in vehicle path and provide obstacle information to the 
     <td>FSR-02, FSR-03</td>
   </tr>
 </table>
-    
 
+### Software Safety Requirements
+<table>
+  <tr>
+    <th>SSR ID</th>
+    <th>Requirement</th>
+    <th>Derived from</th>
+  </tr>
+  <tr>
+    <td>SSR-01</td>
+    <td>The Software shall detect obtsacles within the configured thresold range</td>
+    <td>TSR-01</td>
+  <tr> 
+  <tr>
+    <td>SSR-02</td>
+    <td>The software shall detect the obstacles within the configured angle ranges</td>
+    <td>TSR-01</td>
+  <tr>
+  <tr>
+    <td>SSR-03</td>
+    <td>Ths software shall publish the LiDAR messages every 100ms or faster</td>
+    <td>TSR-02</td>
+  </tr>
+  <tr>
+    <td>SSR-04</td>
+    <td>The sofware shall reject the obtsacles detections outside the configured threshold</td>
+    <td>TSR-04</td>
+  </tr>
+  <tr>
+    <td>SSR-05</td>
+    <td> The software shall consider the obstacles only with continous continous cloud points </td>
+    <td> TSR-04</td>
+  </tr>
+  <tr>
+    <td>SSR-06</td>
+    <td>The software shall issue the stop command upon the detcetion of a critical fault</td>
+    <td>TSR-05</td>
+  </tr>
+  <tr>
+    <td>SSR-07</td>
+    <td> The software shall issue stop command upon detection of obstacle within the threshold range</td>
+    <td>TSR-05</td>
+  </tr>
+   <tr>
+     <td>SSR-08</td>
+     <td>The software shall log-safety related faults for the diagnostics purpose</td>
+     <td>TSR-05</td>
+   </tr>
+ 
+  <tr>
+    <td>SSR-09</td>
+    <td>The software shall detect the stale LiDAR data using timestamps</td>
+    <td>TSR-06</td>
+  </tr>
+  <tr>
+    <td>SSR-10</td>
+    <td>The software shall detect LiDAR message timeout greater than 100 ms</td>
+    <td>TSR-03</td>
+  </tr>
+  <tr>
+    <td>SSR-11</td>
+    <td> The software shall generate a diagnostic fault code when LiDAR communication is lost</td>
+    <td>TSR-03</td>
+  </tr>
+</table>
+
+### FMEA [Failure Modes and Effect Analysis]
+<table>
+  <tr>
+    <th>Failure mode</th>
+    <th>Cause</th>
+    <th>Effect</th>
+    <th>Detection</th>
+    <th>Mitigation</th>
+  </tr>
+  <tr>
+    <td>Lidar Disconnected</td>
+    <td>Cable Unplugged</td>
+    <td>No obatcle detection</td>
+    <td>Timeout monitor</td>
+    <td>Stop vehicle</td>
+  </tr>
+  <tr>
+    <td>Stale point cloud</td>
+    <td>Driver freeze</td>
+    <td>outdated obstacle status</td>
+    <td>Timestamp check</td>
+    <td>Stop vehicle</td>
+  </tr>
+  <tr>
+    <td>False obstacle detected</td>
+    <td>Sensor noise</td>
+    <td>unecessary stop</td>
+    <td>consecutive 2D-point cloud </td>
+    <td>Ignore obstacle</td>
+  </tr>
 
