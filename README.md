@@ -226,7 +226,7 @@ Detect static obstacles in vehicle path and provide obstacle information to the 
   </tr>
 </table>
 
-### FMEA [Failure Modes and Effect Analysis]
+### Failure Modes and Effect Analysis [FMEA]
 <table>
   <tr>
     <th>Failure mode</th>
@@ -256,4 +256,52 @@ Detect static obstacles in vehicle path and provide obstacle information to the 
     <td>consecutive 2D-point cloud </td>
     <td>Ignore obstacle</td>
   </tr>
+</table>
+
+### Fault Tree Analysis [FTA]
+```mermaid
+flowchart TD
+    TE["Collision with Static Obstacle"]
+
+    G1{{OR}}
+
+    TE --> G1
+
+    G1 --> A["Missed Obstacle Detection"]
+    G1 --> B["Late Obstacle Detection"]
+    G1 --> C["LiDAR Communication Failure"]
+
+    %% ----------------------------
+    %% Missed Obstacle Detection
+    %% ----------------------------
+    G2{{OR}}
+    A --> G2
+
+    G2 --> D["Obstacle Detection Algorithm Failure"]
+    G2 --> E["Invalid LiDAR Sensor Data"]
+
+    E --> F["Sensor Noise"]
+    E --> G["Stale Point Cloud"]
+    E --> H["LiDAR Timeout"]
+
+    %% ----------------------------
+    %% Late Obstacle Detection
+    %% ----------------------------
+    G3{{OR}}
+    B --> G3
+
+    G3 --> I["Delayed Point Cloud Processing"]
+    G3 --> J["Low Detection Update Rate [Hz rate]"]
+   
+
+    %% ----------------------------
+    %% LiDAR Communication Failure
+    %% ----------------------------
+    G4{{OR}}
+    C --> G4
+
+    G4 --> L["LiDAR Disconnected"]
+    G4 --> M["LiDAR Driver Failure"]
+    G4 --> N["Power Supply Failure"]
+```
 
